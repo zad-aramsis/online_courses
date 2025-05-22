@@ -201,7 +201,7 @@
             <calendar string="Courses Calendar" date_start="start_date" date_stop="end_date" color="instructor_ids"
                       mode="month">
                 <field name="name"/>
-                <field name="instructor_ids" filters="1" avatar_field="avatar_128"/>
+                <field name="responsible_user_id" filters="1" avatar_field="avatar_1920"/>
             </calendar>
         </field>
     </record>

@@ -1,0 +1,144 @@
+<t t-name="online_courses.AboutUs">
+
+    <div class="o_about_us_page container-fluid p-0">
+
+        <section class="about_header text-white text-center py-5">
+            <div class="container">
+                <h1 class="display-4">About Our Online Courses</h1>
+                <p class="lead">Dedicated to providing high-quality, accessible education for everyone.</p>
+            </div>
+        </section>
+
+        <section class="mission_vision py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body text-center">
+                                <i class="fa fa-bullseye fa-3x text-primary mb-3"></i>
+                                <h3 class="card-title">Our Mission</h3>
+                                <p class="card-text">To empower individuals through flexible and engaging online
+                                    learning experiences, fostering skills for a brighter future.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body text-center">
+                                <i class="fa fa-eye fa-3x text-success mb-3"></i>
+                                <h3 class="card-title">Our Vision</h3>
+                                <p class="card-text">To be a leading global platform for online education,
+                                    recognized for innovation, quality, and commitment to student success.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="why_choose_us bg-light py-5">
+            <div class="container">
+                <h2 class="text-center mb-5">Why Choose Our Courses?</h2>
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 mb-4 text-center">
+                        <div class="feature-item">
+                            <i class="fa fa-user-secret fa-3x text-info mb-3"></i>
+                            <h4>Expert Instructors</h4>
+                            <p>Learn from industry professionals with real-world experience.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4 text-center">
+                        <div class="feature-item">
+                            <i class="fa fa-laptop fa-3x text-warning mb-3"></i>
+                            <h4>Flexible Learning</h4>
+                            <p>Study at your own pace, anytime, anywhere.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4 text-center">
+                        <div class="feature-item">
+                            <i class="fa fa-cogs fa-3x text-danger mb-3"></i>
+                            <h4>Interactive Content</h4>
+                            <p>Engaging videos, quizzes, and hands-on projects.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4 text-center">
+                        <div class="feature-item">
+                            <i class="fa fa-users fa-3x text-secondary mb-3"></i>
+                            <h4>Supportive Community</h4>
+                            <p>Connect with peers and mentors for support.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="team py-5" t-ref="aboutUsRoot">
+            <div class="container">
+                <h2 class="text-center mb-5">Meet Our Core Team</h2>
+                <div class="row justify-content-center">
+                    <t t-if="state.instructors.length > 0">
+                        <t t-foreach="state.instructors" t-as="instructor" t-key="instructor.id">
+                            <div class="col-md-3 col-sm-6 mb-4">
+                                <div class="team-member card text-center shadow">
+                                    <img t-att-src="instructor.image"
+                                         class="card-img-top rounded-circle p-4" alt="Instructor"/>
+                                    <div class="card-body">
+                                        <h5 class="card-title" t-esc="instructor.name"/>
+                                        <p class="card-text text-muted" t-esc="instructor.job_title or 'Instructor'"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <div class="col-md-3 col-sm-6 mb-4">
+                            <div class="team-member card text-center shadow">
+                                <img src="/online_courses/static/src/img/avatar_placeholder_icon.png"
+                                     class="card-img-top rounded-circle p-4" alt="Team Member 1"/>
+                                <div class="card-body">
+                                    <h5 class="card-title">Jane Doe</h5>
+                                    <p class="card-text text-muted">Lead Educator</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-4">
+                            <div class="team-member card text-center shadow">
+                                <img src="/online_courses/static/src/img/avatar_placeholder_icon.png"
+                                     class="card-img-top rounded-circle p-4" alt="Team Member 2"/>
+                                <div class="card-body">
+                                    <h5 class="card-title">John Smith</h5>
+                                    <p class="card-text text-muted">Platform Architect</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-4">
+                            <div class="team-member card text-center shadow">
+                                <img src="/online_courses/static/src/img/avatar_placeholder_icon.png"
+                                     class="card-img-top rounded-circle p-4" alt="Team Member 3"/>
+                                <div class="card-body">
+                                    <h5 class="card-title">Alex Lee</h5>
+                                    <p class="card-text text-muted">Student Success Lead</p>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta bg-primary text-white text-center py-5">
+            <div class="container">
+                <h2>Ready to Start Learning or Meet the Experts?</h2>
+                <p class="lead mb-4">Explore our wide range of courses or get to know our talented instructors.</p>
+                <button type="button" class="btn btn-outline-light btn-lg me-2">Explore Courses
+                </button>
+                <button type="button" class="btn btn-outline-light btn-lg me-2">Meet Our Instructors
+                </button>
+            </div>
+        </section>
+
+    </div>
+
+</t>

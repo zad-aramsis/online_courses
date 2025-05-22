@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_online_courses_root"
+              name="Online Courses"
+              web_icon="online_courses,static/description/icon.png"
+              sequence="0"
+              groups="group_online_courses_student,group_online_courses_instructor,group_online_courses_admin"/>
+
+    <menuitem id="menu_online_courses_master"
+              name="Courses"
+              parent="menu_online_courses_root"
+              sequence="10"
+              groups="group_online_courses_admin"/>
+    <menuitem id="menu_action_online_course_list"
+              name="All Courses"
+              action="action_online_course_list"
+              parent="menu_online_courses_master"
+              sequence="10"/>
+    <menuitem id="menu_action_online_session_list"
+              name="All Sessions"
+              action="action_online_session_list"
+              parent="menu_online_courses_master"
+              sequence="20"/>
+
+    <menuitem id="menu_my_profile_courses"
+              name="My Courses"
+              parent="menu_online_courses_root"
+              sequence="20"
+              groups="group_online_courses_student,group_online_courses_instructor">
+        <menuitem id="menu_my_courses"
+                  name="My Courses"
+                  action="action_online_course_list"
+                  sequence="10"/>
+        <menuitem id="menu_my_sessions"
+                  name="My Sessions"
+                  action="action_online_session_list"
+                  sequence="20"/>
+    </menuitem>
+
+    <menuitem id="menu_online_courses_participants"
+              name="Participants"
+              parent="menu_online_courses_root"
+              sequence="30"/>
+    <menuitem id="menu_action_online_instructor_list"
+              name="Instructors"
+              action="action_online_instructor_list"
+              parent="menu_online_courses_participants"
+              sequence="10"
+              groups="group_online_courses_instructor,group_online_courses_admin"/>
+    <menuitem id="menu_action_online_student_list"
+              name="Students"
+              action="action_online_student_list"
+              parent="menu_online_courses_participants"
+              sequence="20"
+              groups="group_online_courses_student,group_online_courses_instructor,group_online_courses_admin"/>
+
+    <menuitem id="menu_action_open_linkedin_config"
+              name="Visit Our Company Site"
+              action="action_open_linkedin"
+              parent="menu_online_courses_root"
+              sequence="90"/>
+
+    <menuitem id="menu_online_courses_config"
+              name="Configuration"
+              parent="menu_online_courses_root"
+              sequence="100"
+              groups="group_online_courses_admin">
+        <menuitem id="menu_action_instructor_expertise_tag"
+                  name="Instructor Expertise Tags"
+                  action="action_instructor_expertise_tag"
+                  sequence="10"/>
+    </menuitem>
+
+    <menuitem id="menu_online_courses_about_us_page"
+              name="About Us"
+              action="action_online_courses_about_us_page"
+              parent="menu_online_courses_root"
+              sequence="150"/>
+
+</odoo>

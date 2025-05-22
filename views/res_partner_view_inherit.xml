@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_partner_form_inherit_online_courses" model="ir.ui.view">
+            <field name="name">res.partner.form.inherit.online.courses</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                    <button name="action_view_instructor_profile" type="object"
+                            class="oe_stat_button" icon="fa-user-secret"
+                            invisible="not is_instructor"
+                            help="View instructor profile Associated with this Contact">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">Instructor</span>
+                            <span class="o_stat_text">Profile</span>
+                        </div>
+                    </button>
+                    <button name="action_view_student_profile" type="object"
+                            class="oe_stat_button" icon="fa-graduation-cap"
+                            invisible="not is_student"
+                            help="View student profile Associated with this Contact">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">Student</span>
+                            <span class="o_stat_text">Profile</span>
+                        </div>
+                    </button>
+                </xpath>
+
+                <xpath expr="//page[@name='internal_notes']" position="before">
+                    <page string="Education Roles" name="education_roles" autofocus="autofocus">
+                        <group>
+                            <group string="Roles in Online Courses">
+                                <field name="is_instructor" widget="boolean_toggle"/>
+                                <field name="is_student" widget="boolean_toggle"/>
+                            </group>
+<!--                            <group string="Associated Profiles">-->
+<!--                                <field name="instructor_profile_ids" readonly="1" force_save="1"-->
+<!--                                       invisible="not is_instructor"-->
+<!--                                       nolabel="1" colspan="2">-->
+<!--                                    <tree create="false" delete="false" edit="false">-->
+<!--                                        <field name="name" string="Instructor Profile Name"/>-->
+<!--                                        <field name="biography" optional="hide"/>-->
+<!--                                    </tree>-->
+<!--                                </field>-->
+<!--                                <field name="student_profile_ids" readonly="1" force_save="1"-->
+<!--                                       invisible="not is_student"-->
+<!--                                       nolabel="1" colspan="2">-->
+<!--                                    <tree create="false" delete="false" edit="false">-->
+<!--                                        <field name="name" string="Student Profile Name"/>-->
+<!--                                        <field name="student_id_number"/>-->
+<!--                                        <field name="enrollment_date"/>-->
+<!--                                    </tree>-->
+<!--                                </field>-->
+<!--                            </group>-->
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_partner_tree_inherit_online_courses" model="ir.ui.view">
+            <field name="name">res.partner.tree.inherit.online.courses</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='email']" position="after">
+                    <field name="is_instructor" widget="boolean_toggle" optional="show"/>
+                    <field name="is_student" widget="boolean_toggle" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="res_partner_kanban_view_inherit_online_courses" model="ir.ui.view">
+            <field name="name">res.partner.kanban.inherit.online.courses</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//kanban" position="inside">
+                    <field name="is_instructor"/>
+                    <field name="is_student"/>
+                </xpath>
+                <xpath expr="//div[hasclass('oe_kanban_details')]//div//ul" position="inside">
+                    <li t-if="record.is_instructor.raw_value" class="text-success">
+                        <i class="fa fa-user-secret"/> Instructor
+                    </li>
+                    <li t-if="record.is_student.raw_value" class="text-info">
+                        <i class="fa fa-graduation-cap"/> Student
+                    </li>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_res_partner_filter_inherit_online_courses" model="ir.ui.view">
+            <field name="name">res.partner.search.inherit.online.courses</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='type_company']" position="after">
+                    <separator/>
+                    <filter string="Is Instructor" name="is_instructor" domain="[('is_instructor','=',True)]"/>
+                    <filter string="Is Student" name="is_student" domain="[('is_student','=',True)]"/>
+                    <separator/>
+                </xpath>
+                <xpath expr="//group[@name='group_by']//filter[@name='group_company']" position="before">
+                    <filter string="Role: Instructor" name="group_by_is_instructor"
+                            context="{'group_by':'is_instructor'}"/>
+                    <filter string="Role: Student" name="group_by_is_student" context="{'group_by':'is_student'}"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

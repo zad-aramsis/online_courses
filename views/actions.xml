@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_online_course_list" model="ir.actions.act_window">
+        <field name="name">Courses</field>
+        <field name="res_model">online.course</field>
+        <field name="view_mode">kanban,tree,form,calendar,gantt,pivot,graph,activity,map</field>
+        <field name="search_view_id" ref="view_online_course_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new online course!
+            </p>
+            <p>
+                Manage your courses, assign instructors, schedule sessions, and enroll students.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_online_session_list" model="ir.actions.act_window">
+        <field name="name">Sessions</field>
+        <field name="res_model">online.session</field>
+        <field name="view_mode">tree,form,kanban,calendar</field>
+        <field name="search_view_id" ref="view_online_session_search"/>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Schedule a new session for a course.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_online_instructor_list" model="ir.actions.act_window">
+        <field name="name">Instructors</field>
+        <field name="res_model">online.instructor</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="view_online_instructor_search"/>
+        <field name="context">{'default_is_instructor': True}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new instructor.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_online_student_list" model="ir.actions.act_window">
+        <field name="name">Students</field>
+        <field name="res_model">online.student</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="view_online_student_search"/>
+        <field name="context">{'default_is_student': True}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Register a new student.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_instructor_expertise_tag" model="ir.actions.act_window">
+        <field name="name">Expertise Tags</field>
+        <field name="res_model">instructor.expertise.tag</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_instructor_expertise_tag_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new expertise tag for instructors.
+            </p>
+            <p>
+                Tags help categorize instructors by their skills and knowledge areas.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_online_courses_about_us_page" model="ir.actions.client">
+        <field name="name">About Us - Online Courses</field>
+        <field name="tag">about.us.client.action</field>
+    </record>
+
+    <record id="action_open_linkedin" model="ir.actions.act_url">
+        <field name="name">Company Site</field>
+        <field name="url">https://www.zadsolutions.com</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="action_server_course_create_default_session" model="ir.actions.server">
+        <field name="name">Create Default Session(s)</field>
+        <field name="model_id" ref="model_online_course"/>
+        <field name="binding_model_id" ref="model_online_course"/>
+        <field name="binding_view_types">form,list</field>
+        <field name="state">code</field>
+        <field name="code">
+            records.action_create_course_sessions()
+        </field>
+    </record>
+
+</odoo>

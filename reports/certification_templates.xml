@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_student_overall_certification_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="student_profile">
+                <t t-set="student_completed_courses" t-value="student_profile.completed_course_ids"/>
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <h1 class="text-center mt64">Certificate of Achievement</h1>
+
+                        <div class="row mt32 mb32">
+                            <div class="col-12 text-center">
+                                <p style="font-size: 1.2em;">This certificate is proudly presented to</p>
+                                <h2 style="font-size: 2.5em; color: #007bff;"><t t-esc="student_profile.name"/></h2>
+                                <p t-if="student_profile.student_id_number">Student ID:
+                                    <t t-esc="student_profile.student_id_number"/>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="row mt32 mb32">
+                            <div class="col-12">
+                                <p style="font-size: 1.2em;" class="text-center">
+                                    For successfully completing the following course(s):
+                                </p>
+                                <t t-if="student_completed_courses">
+                                    <ul class="list-group">
+                                        <t t-foreach="student_completed_courses" t-as="course">
+                                            <li class="list-group-item">
+                                                <h4 style="color: #28a745;"><t t-esc="course.name"/></h4>
+                                                <p class="mb-0">
+                                                    Completed on: <span t-field="course.end_date"/> (Assumed)<br/>
+                                                    Instructors: <span t-esc="course.instructor_ids.mapped('name')"/>
+                                                </p>
+                                            </li>
+                                        </t>
+                                    </ul>
+                                </t>
+                                <t t-else="">
+                                    <p class="text-center">No courses have been marked as completed yet.</p>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_course_student_certification_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="course">
+                <t t-set="student_profile"
+                   t-value="env['online.student'].browse(context.get('active_student_ids')) if context.get('active_student_ids') else None"/>
+                <t t-if="student_profile and student_profile in course.student_ids">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <h1 class="text-center mt64">Certificate of Completion</h1>
+                            <div class="row mt32 mb32">
+                                <div class="col-12 text-center">
+                                    <p style="font-size: 1.2em;">This certificate is proudly presented to</p>
+                                    <h2 style="font-size: 2.5em; color: #007bff;"><t t-esc="student_profile.name"/></h2>
+                                    <p t-if="student_profile.student_id_number">Student ID:
+                                        <t t-esc="student_profile.student_id_number"/>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row mt32 mb32">
+                                <div class="col-12 text-center">
+                                    <p style="font-size: 1.2em;">For successfully completing the course:</p>
+                                    <h3 style="color: #28a745;"><t t-esc="course.name"/></h3>
+                                    <p>
+                                        Instructors: <span t-esc="course.instructor_ids.mapped('name')"/><br/>
+                                        Completion Date: <span t-field="course.end_date"/> (or actual completion date if
+                                        tracked per student)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+                <t t-else="">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <p>Student information not provided, student not found,
+                                or student not enrolled in this course.</p>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

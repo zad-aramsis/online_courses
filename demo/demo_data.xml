@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="partner_instructor_carter" model="res.partner">
+            <field name="name">Dr. Emily Carter</field>
+            <field name="email">emily.carter@example.com</field>
+            <field name="is_instructor">True</field>
+        </record>
+        <record id="partner_instructor_doe" model="res.partner">
+            <field name="name">Prof. John Doe</field>
+            <field name="email">john.doe@example.com</field>
+            <field name="is_instructor">True</field>
+        </record>
+
+        <record id="instructor_carter" model="online.instructor">
+            <field name="partner_id" ref="partner_instructor_carter"/>
+            <field name="job_title">PhD in Computer Science</field>
+            <field name="biography">PhD in Computer Science, 10 years of experience in Odoo.</field>
+        </record>
+        <record id="instructor_doe" model="online.instructor">
+            <field name="partner_id" ref="partner_instructor_doe"/>
+            <field name="job_title">Author of 'Advanced Python'</field>
+            <field name="biography">Author of 'Advanced Python', Python Core Developer.</field>
+        </record>
+
+        <record id="partner_student_alice" model="res.partner">
+            <field name="name">Alice Wonderland</field>
+            <field name="email">alice.w@example.com</field>
+            <field name="is_student">True</field>
+        </record>
+        <record id="partner_student_bob" model="res.partner">
+            <field name="name">Bob The Builder</field>
+            <field name="email">bob.b@example.com</field>
+            <field name="is_student">True</field>
+        </record>
+
+        <record id="student_alice" model="online.student">
+            <field name="partner_id" ref="partner_student_alice"/>
+            <field name="student_id_number">S0001</field>
+        </record>
+        <record id="student_bob" model="online.student">
+            <field name="partner_id" ref="partner_student_bob"/>
+            <field name="student_id_number">S0002</field>
+        </record>
+
+        <record id="demo_course_odoo_dev" model="online.course">
+            <field name="name">Odoo 17 Development Fundamentals</field>
+            <field name="description">Learn the basics of Odoo module development.</field>
+            <field name="instructor_ids" eval="[(6, 0, [ref('instructor_carter')])]"/>
+            <field name="responsible_user_id" ref="base.user_admin"/>
+            <field name="start_date" eval="(DateTime.now() + relativedelta(days=7)).strftime('%Y-%m-%d')"/>
+            <field name="end_date" eval="(DateTime.now() + relativedelta(days=37)).strftime('%Y-%m-%d')"/>
+            <field name="student_ids" eval="[(6, 0, [ref('student_alice'), ref('student_bob')])]"/>
+        </record>
+
+        <record id="demo_course_python_advanced" model="online.course">
+            <field name="name">Advanced Python Programming</field>
+            <field name="description">Dive deep into advanced Python concepts.</field>
+            <field name="instructor_ids" eval="[(6, 0, [ref('instructor_doe')])]"/>
+            <field name="responsible_user_id" ref="base.user_admin"/>
+            <field name="start_date" eval="(DateTime.now() + relativedelta(days=10)).strftime('%Y-%m-%d')"/>
+            <field name="end_date" eval="(DateTime.now() + relativedelta(days=50)).strftime('%Y-%m-%d')"/>
+            <field name="student_ids" eval="[(6, 0, [ref('student_alice')])]"/>
+        </record>
+
+        <record id="demo_session_odoo_intro" model="online.session">
+            <field name="name">Introduction to Odoo Development - Week 1</field>
+            <field name="course_id" ref="demo_course_odoo_dev"/>
+            <field name="instructor_id" ref="instructor_carter"/>
+            <field name="start_datetime"
+                   eval="(DateTime.now() + relativedelta(days=8, hours=2)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="duration">2.5</field>
+            <field name="seats">20</field>
+            <field name="attendee_ids" eval="[(6, 0, [ref('student_alice'), ref('student_bob')])]"/>
+        </record>
+
+    </data>
+</odoo>

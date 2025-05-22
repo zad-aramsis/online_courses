@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_online_course_form" model="ir.ui.view">
+        <field name="name">online.course.form</field>
+        <field name="model">online.course</field>
+        <field name="arch" type="xml">
+            <form string="Course">
+                <header>
+                    <button name="action_confirm" string="Confirm Course" type="object" class="oe_highlight"
+                            invisible="state not in ['draft']"
+                            groups="online_courses.group_online_courses_admin,online_courses.group_online_courses_instructor"/>
+                    <button name="action_complete" string="Mark as Completed" type="object" class="oe_highlight"
+                            invisible="state not in ['in_progress']"
+                            groups="online_courses.group_online_courses_admin,online_courses.group_online_courses_instructor"/>
+                    <button name="action_cancel" string="Cancel Course" type="object" invisible="state not in ['draft', 'in_progress']"
+                            groups="online_courses.group_online_courses_admin,online_courses.group_online_courses_instructor"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object"
+                            invisible="state not in ['cancelled', 'completed']"
+                            groups="online_courses.group_online_courses_admin"/>
+                    <button name="%(online_courses.action_report_course_student_certification_wizard_action)d"
+                            string="Print Student Certificate" type="action" class="oe_highlight" invisible="state not in ['completed']"
+                            groups="online_courses.group_online_courses_admin,online_courses.group_online_courses_instructor"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_session_list" type="object"
+                                class="oe_stat_button" icon="fa-calendar"
+                                invisible="not session_ids">
+                            <field name="total_sessions" widget="statinfo" string="Sessions"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name" placeholder="e.g. Introduction to Odoo" readonly="state != 'draft'" force_save="1"/></h1>
+                        <label for="sequence_id" class="oe_edit_only"/>
+                        <h3><field name="sequence_id" readonly="1"/></h3>
+                        <field name="active" widget="boolean_toggle" invisible="1" />
+                    </div>
+                    <group>
+                        <group>
+                            <field name="responsible_user_id" options="{'no_create': True, 'no_open': True}" readonly="1" force_save="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="instructor_ids" widget="many2many_avatar_user" readonly="state != 'draft'" force_save="1"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="price" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="state != 'draft'" force_save="1"/>
+                            <field name="total_students" string="Total Enrolled Students"/>
+                        </group>
+                        <group>
+                            <field name="start_date" readonly="state != 'draft'" force_save="1"/>
+                            <field name="end_date" readonly="state != 'draft'" force_save="1"/>
+                            <field name="duration_days"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" readonly="state != 'draft'" force_save="1" placeholder="Detailed description of the course..."/>
+                        </page>
+                        <page string="Sessions">
+                            <field name="session_ids" readonly="state != 'draft'" force_save="1">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="instructor_id"/>
+                                    <field name="start_datetime"/>
+                                    <field name="end_datetime"/>
+                                    <field name="duration"/>
+                                    <field name="seats"/>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state=='done'"
+                                           decoration-info="state=='confirmed'"
+                                           decoration-muted="state=='draft'"
+                                           decoration-danger="state=='cancelled'"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Students">
+                            <field name="student_ids" readonly="state != 'draft'" force_save="1">
+                                <tree create="0" edit="0" delete="1" editable="bottom">
+                                    <field name="name"/>
+                                    <field name="student_id_number"/>
+                                    <field name="email"/>
+                                    <field name="phone" optional="hide"/>
+                                    <field name="enrollment_date"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_online_course_tree" model="ir.ui.view">
+        <field name="name">online.course.tree</field>
+        <field name="model">online.course</field>
+        <field name="arch" type="xml">
+            <tree string="Courses" decoration-success="state=='completed'" decoration-info="state=='in_progress'"
+                  decoration-muted="state=='draft'" decoration-danger="state=='cancelled'">
+                <field name="sequence_id"/>
+                <field name="name"/>
+                <field name="instructor_ids" widget="many2many_avatar_user" optional="show"/>
+                <field name="responsible_user_id" optional="show"/>
+                <field name="start_date" optional="show"/>
+                <field name="end_date" optional="show"/>
+                <field name="total_sessions" sum="Total Sessions" optional="show"/>
+                <field name="total_students" sum="Total Students" optional="show"/>
+                <field name="state" widget="badge"
+                       decoration-success="state=='completed'"
+                       decoration-info="state=='in_progress'"
+                       decoration-muted="state=='draft'"
+                       decoration-danger="state=='cancelled'"/>
+                <field name="activity_ids" widget="list_activity" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_online_course_kanban" model="ir.ui.view">
+        <field name="name">online.course.kanban</field>
+        <field name="model">online.course</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="instructor_ids"/>
+                <field name="start_date"/>
+                <field name="total_students"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary">
+                                        <span>Name: <t t-esc="record.name.value"/></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_kanban_card_content mt4">
+                                <div>
+                                    <i class="fa fa-user-secret"/> Instructors: <field name="instructor_ids" widget="many2many_avatar_user"/>
+                                </div>
+                                <div t-if="record.start_date.value">
+                                    <i class="fa fa-calendar"/> Start: <field name="start_date"/>
+                                </div>
+                                <div><i class="fa fa-users"/> Students: <field name="total_students"/></div>
+                            </div>
+                            <div class="o_kanban_card_footer">
+                                <div class="o_kanban_card_footer_item">
+                                    <field name="state" widget="label_selection"
+                                           options="{'classes': {'draft': 'default', 'in_progress': 'info', 'completed': 'success', 'cancelled': 'danger'}}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_online_course_search" model="ir.ui.view">
+        <field name="name">online.course.search</field>
+        <field name="model">online.course</field>
+        <field name="arch" type="xml">
+            <search string="Search Courses">
+                <field name="name" string="Course Title or ID"
+                       filter_domain="['|', ('name','ilike',self), ('sequence_id','ilike',self)]"/>
+                <field name="instructor_ids" operator="child_of"/>
+                <field name="responsible_user_id"/>
+                <field name="student_ids" string="Student"/>
+                <separator/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="In Progress" name="in_progress" domain="[('state', '=', 'in_progress')]"/>
+                <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Instructor" name="group_by_instructor" context="{'group_by':'instructor_ids'}"/>
+                    <filter string="Responsible" name="group_by_responsible"
+                            context="{'group_by':'responsible_user_id'}"/>
+                    <filter string="Status" name="group_by_state" context="{'group_by':'state'}"/>
+                    <filter string="Start Date (Month)" name="group_by_start_date"
+                            context="{'group_by':'start_date:month'}"/>
+                </group>
+                <searchpanel>
+                    <field name="responsible_user_id" icon="fa-user" select="multi" enable_counters="1"/>
+                    <field name="state" icon="fa-tasks" enable_counters="1"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_online_course_calendar" model="ir.ui.view">
+        <field name="name">online.course.calendar</field>
+        <field name="model">online.course</field>
+        <field name="arch" type="xml">
+            <calendar string="Courses Calendar" date_start="start_date" date_stop="end_date" color="instructor_ids"
+                      mode="month">
+                <field name="name"/>
+                <field name="instructor_ids" filters="1" avatar_field="avatar_128"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="view_online_course_gantt" model="ir.ui.view">
+        <field name="name">online.course.gantt</field>
+        <field name="model">online.course</field>
+        <field name="arch" type="xml">
+            <gantt string="Courses Gantt"
+                   date_start="start_date"
+                   date_stop="end_date"
+                   default_group_by="instructor_ids"
+                   color="instructor_ids"
+                   progress="total_students"
+                   consolidation_max='{"total_students": 100}'>
+                <field name="name"/>
+                <field name="state"/>
+                <field name="instructor_ids"/>
+            </gantt>
+        </field>
+    </record>
+
+    <record id="view_online_course_pivot" model="ir.ui.view">
+        <field name="name">online.course.pivot</field>
+        <field name="model">online.course</field>
+        <field name="arch" type="xml">
+            <pivot string="Courses Pivot Analysis">
+                <field name="instructor_ids" type="row"/>
+                <field name="state" type="col"/>
+                <field name="total_students" type="measure"/>
+                <field name="total_sessions" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_online_course_graph" model="ir.ui.view">
+        <field name="name">online.course.graph</field>
+        <field name="model">online.course</field>
+        <field name="arch" type="xml">
+            <graph string="Courses Graph Analysis" type="bar">
+                <field name="instructor_ids" type="row"/>
+                <field name="state" type="col"/>
+                <field name="total_students" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_online_course_activity" model="ir.ui.view">
+        <field name="name">online.course.activity</field>
+        <field name="model">online.course</field>
+        <field name="arch" type="xml">
+            <activity string="Course Activities">
+                <field name="name"/>
+                <field name="instructor_ids"/>
+                <field name="state"/>
+                <field name="start_date"/>
+            </activity>
+        </field>
+    </record>
+
+    <record id="view_online_course_map" model="ir.ui.view">
+        <field name="name">online.course.map</field>
+        <field name="model">online.course</field>
+        <field name="arch" type="xml">
+            <map string="Course Locations" res_partner="instructor_ids" routing="True" hide_address="True">
+                <field name="instructor_ids" string="Instructor Location"/>
+                <field name="name" string="Name"/>
+                <field name="state" string="State"/>
+            </map>
+        </field>
+    </record>
+
+</odoo>

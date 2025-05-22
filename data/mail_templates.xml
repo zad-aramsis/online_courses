@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="email_template_instructor_assignment" model="mail.template">
+            <field name="name">Course: Instructor Assignment Notification</field>
+            <field name="model_id" ref="online_courses.model_online_course"/>
+            <field name="subject">You have been assigned as an instructor for the course: {{object.name}}</field>
+            <field name="email_from">{{ object.company_id.email }}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    Dear Instructor,<br/><br/>
+                    You have been assigned as the instructor for the course: <strong><t t-out="object.name or ''"/></strong>.<br/>
+                    Course Start Date: <t t-out="object.start_date or ''"/><br/>
+                    You can view the course details here:
+                    <div style="display: inline-block; margin: 15px; text-align: center">
+                        <a t-att-href="'/mail/view?model=online.course&amp;res_id=%s'%object.id"
+                           target="_blank"
+                           style="padding: 5px 10px; color: #FFFFFF; text-decoration: none; background-color: #875A7B; border: 1px solid #875A7B; border-radius: 3px">
+                            View
+                        </a>
+                    </div>
+                    <br/>
+                    <br/>
+                    Thank and Regards,
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

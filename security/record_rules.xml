@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="rule_online_course_student_can_see_enrolled" model="ir.rule">
+            <field name="name">Student: See Enrolled Courses</field>
+            <field name="model_id" ref="model_online_course"/>
+            <field name="groups" eval="[(4, ref('online_courses.group_online_courses_student'))]"/>
+            <field name="domain_force">[('student_ids', 'in', user.partner_id.student_profile_ids.ids)]</field>
+        </record>
+
+        <record id="rule_online_session_student_can_see_enrolled" model="ir.rule">
+            <field name="name">Student: See Sessions of Enrolled Courses/Attended</field>
+            <field name="model_id" ref="model_online_session"/>
+            <field name="groups" eval="[(4, ref('online_courses.group_online_courses_student'))]"/>
+            <field name="domain_force">['|', ('course_id.student_ids', 'in', user.partner_id.student_profile_ids.ids),
+                                        ('attendee_ids', 'in', user.partner_id.student_profile_ids.ids)]</field>
+        </record>
+
+        <record id="rule_online_student_self_access" model="ir.rule">
+            <field name="name">Student: Access Own Student Profile</field>
+            <field name="model_id" ref="model_online_student"/>
+            <field name="groups" eval="[(4, ref('online_courses.group_online_courses_student'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="domain_force">[('partner_id', '=', user.partner_id.id)]</field>
+        </record>
+
+        <record id="rule_online_course_instructor_assigned" model="ir.rule">
+            <field name="name">Instructor: Manage Assigned Courses</field>
+            <field name="model_id" ref="model_online_course"/>
+            <field name="groups" eval="[(4, ref('online_courses.group_online_courses_instructor'))]"/>
+            <field name="domain_force">[('instructor_ids', 'in', user.partner_id.instructor_profile_ids.ids)]</field>
+        </record>
+
+        <record id="rule_online_session_instructor_assigned" model="ir.rule">
+            <field name="name">Instructor: Manage Sessions of Assigned Courses</field>
+            <field name="model_id" ref="model_online_session"/>
+            <field name="groups" eval="[(4, ref('online_courses.group_online_courses_instructor'))]"/>
+            <field name="domain_force">['|', ('instructor_id', 'in', user.partner_id.instructor_profile_ids.ids),
+                                        ('course_id.instructor_ids', 'in', user.partner_id.instructor_profile_ids.ids)]</field>
+        </record>
+
+        <record id="rule_online_instructor_self_access" model="ir.rule">
+            <field name="name">Instructor: Access Own Instructor Profile</field>
+            <field name="model_id" ref="model_online_instructor"/>
+            <field name="groups" eval="[(4, ref('online_courses.group_online_courses_instructor'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="domain_force">[('partner_id', '=', user.partner_id.id)]</field>
+        </record>
+
+        <record id="rule_online_student_instructor_can_see_their_students" model="ir.rule">
+            <field name="name">Instructor: Can see student profiles of their courses</field>
+            <field name="model_id" ref="model_online_student"/>
+            <field name="groups" eval="[(4, ref('online_courses.group_online_courses_instructor'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="domain_force">[('enrolled_course_ids', 'in', user.partner_id.instructor_profile_ids.course_ids.ids)]</field>
+        </record>
+
+        <record id="rule_online_student_admin" model="ir.rule">
+            <field name="name">Admin: Access All Student Profiles</field>
+            <field name="model_id" ref="model_online_student"/>
+            <field name="groups" eval="[(4, ref('online_courses.group_online_courses_admin'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record id="rule_online_instructor_admin" model="ir.rule">
+            <field name="name">Admin: Access All Instructor Profiles</field>
+            <field name="model_id" ref="model_online_instructor"/>
+            <field name="groups" eval="[(4, ref('online_courses.group_online_courses_admin'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record id="rule_online_course_admin" model="ir.rule">
+            <field name="name">Admin: Access All Courses</field>
+            <field name="model_id" ref="model_online_course"/>
+            <field name="groups" eval="[(4, ref('online_courses.group_online_courses_admin'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record id="rule_online_session_admin" model="ir.rule">
+            <field name="name">Admin: Access All Sessions</field>
+            <field name="model_id" ref="model_online_session"/>
+            <field name="groups" eval="[(4, ref('online_courses.group_online_courses_admin'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record id="rule_res_partner_admin" model="ir.rule">
+            <field name="name">Admin: Access All Partners</field>
+            <field name="model_id" ref="model_res_partner"/>
+            <field name="groups" eval="[(4, ref('online_courses.group_online_courses_admin'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+    </data>
+</odoo>

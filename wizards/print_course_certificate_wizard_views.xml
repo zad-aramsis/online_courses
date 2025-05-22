@@ -1,0 +1,30 @@
+<odoo>
+
+    <record id="view_print_course_certificate_wizard_form" model="ir.ui.view">
+        <field name="name">print.course.certificate.wizard.form</field>
+        <field name="model">print.course.certificate.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Print Course Certificate">
+                <group>
+                    <field name="course_id" invisible="1"/>
+                    <field name="allowed_student_ids" invisible="1"/>
+                    <field name="student_id" options="{'no_create': True, 'no_open': True}"/>
+                </group>
+                <footer>
+                    <button name="action_print_certificate" string="Print Certificate" type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_report_course_student_certification_wizard_action" model="ir.actions.act_window">
+        <field name="name">Print Course Certificate</field>
+        <field name="res_model">print.course.certificate.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_course_id': active_id}</field>
+    </record>
+
+</odoo>
